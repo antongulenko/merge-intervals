@@ -1,3 +1,5 @@
+// This package implements a Merge() method for a slice of integer-value intervals. The main type of this package is
+// Intervals, with its Intervals.Merge() method.
 package merge_intervals
 
 import (
@@ -14,7 +16,7 @@ type Interval struct {
 // Merge attempts to merge the receiving interval with the argument. The merge succeeds when the intervals overlap,
 // in this case the merged interval is returned, along with a true-valued flag indicating the success. Otherwise,
 // a false-valued flag indicates that the intervals do not overlap. This operation is symmetrical (the receiver and the
-// argument can be exchanged with the same result)..
+// argument can be exchanged with the same result).
 //
 // In case of a successful merge, the result is always a correct interval, i.e. result.From <= result.To
 func (i Interval) Merge(other Interval) (result Interval, overlap bool) {
@@ -38,7 +40,8 @@ func (i Interval) Contains(num int) bool {
 	return num >= i.From && num <= i.To
 }
 
-// Fix swaps the From and To fields of the receiving interval, if To < From
+// Fix swaps the From and To fields of the receiving interval, if To < From. This corrects wrong input intervals, where
+// the bounds are exchanged.
 func (i Interval) Fix() Interval {
 	if i.To < i.From {
 		i.From, i.To = i.To, i.From
@@ -46,13 +49,13 @@ func (i Interval) Fix() Interval {
 	return i
 }
 
-// String returns a human-readable representation of the receiving interval
+// String returns a human-readable representation of the receiving interval.
 func (i Interval) String() string {
 	return fmt.Sprintf("[%v, %v]", i.From, i.To)
 }
 
 // Intervals contain a slice of Interval data. Intervals implements sort.Interface to sort all intervals based on their
-// lower bound.
+// lower bounds (From field).
 type Intervals []Interval
 
 func (intervals Intervals) Len() int {
@@ -67,6 +70,10 @@ func (intervals Intervals) Less(x, y int) bool {
 	return intervals[x].From < intervals[y].From
 }
 
+// Merge is the core method of this module. The output is a list of intervals, where all overlapping input intervals
+// are merged into one output interval.
+// Merge first sorts the input intervals based on their lower bounds. Afterwards, it iterates over the sorted intervals
+// and produces a new output interval every time an input interval does not overlap with its predecessor.
 func (intervals Intervals) Merge() Intervals {
 	if len(intervals) == 0 {
 		return intervals

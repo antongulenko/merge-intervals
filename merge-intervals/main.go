@@ -1,3 +1,5 @@
+// This tool parses a list of intervals from the input arguments and uses the merge_intervals library to sort and merge
+// the intervals.
 package main
 
 import (

@@ -61,7 +61,8 @@ func (s *MergeIntervalsTestSuite) TestMergeTwoIntervals() {
 }
 
 func (s *MergeIntervalsTestSuite) TestExample() {
-	merged := Intervals{{25, 30}, Interval{2, 19}, Interval{14, 23}, Interval{4, 8}}.Merge()
+	input := Intervals{{25, 30}, Interval{2, 19}, Interval{14, 23}, Interval{4, 8}}
+	merged := input.Merge()
 	s.Equal(Intervals{{2, 23}, {25, 30}}, merged)
 }
 
@@ -70,10 +71,12 @@ func (s *MergeIntervalsTestSuite) TestMergeEmptyIntervals() {
 }
 
 func (s *MergeIntervalsTestSuite) TestMergeEqualIntervals() {
-	s.Equal(Intervals{{5, 10}}, Intervals{{5, 10}, {5, 10}, {5, 10}}.Merge())
+	input := Intervals{{5, 10}, {5, 10}, {5, 10}}
+	s.Equal(Intervals{{5, 10}}, input.Merge())
 }
 
 func (s *MergeIntervalsTestSuite) TestMergeIncorrectIntervals() {
 	// Test with intervals where From > To
-	s.Equal(Intervals{{5, 15}, {20, 40}}, Intervals{{15, 8}, {5, 10}, {40, 20}}.Merge())
+	input := Intervals{{15, 8}, {5, 10}, {40, 20}}
+	s.Equal(Intervals{{5, 15}, {20, 40}}, input.Merge())
 }
