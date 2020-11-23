@@ -91,6 +91,5 @@ func (intervals Intervals) Merge() Intervals {
 	}
 
 	// At the end, the current aggregation variable is the last result interval.
-	result = append(result, current.Fix())
-	return result
+	return append(result, current.Fix())
 }
